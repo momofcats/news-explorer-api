@@ -40,6 +40,7 @@ const articleShema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'author',
     required: true,
+    select: false,
   },
 }, { versionKey: false });
 
