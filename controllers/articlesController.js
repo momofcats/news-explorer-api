@@ -1,17 +1,24 @@
 const Article = require('../models/article');
+const {
+  STATUS_CODE_OK,
+  STATUS_CODE_CREATED,
+} = require('../utils/statusCodes');
 
-const getArticles = (req, res) => {
+const NotFoundError = require('../errors/not-found-err');
+const BadRequestError = require('../errors/bad-req-err');
+
+const getArticles = (req, res, next) => {
   Article.find({})
     .then((articles) => {
       if (articles.length === 0) {
-        return res.status(404).send({ message: 'Articles were not found' });
+        throw new NotFoundError('Articles were not found');
       }
-      return res.status(200).send(articles);
+      return res.status(STATUS_CODE_OK).send(articles);
     })
-    .catch();
+    .catch(next);
 };
 
-const createArticle = (req, res) => {
+const createArticle = (req, res, next) => {
   const {
     keyword, title, text, date, source, link, image,
   } = req.body;
@@ -19,19 +26,19 @@ const createArticle = (req, res) => {
     keyword, title, text, date, source, link, image, owner: req.user._id,
   })
     .then((article) => {
-      res.status(201).send(article);
+      res.status(STATUS_CODE_CREATED).send(article);
     })
-    .catch();
+    .catch(next);
 };
 
-const deleteArticle = (req, res) => {
+const deleteArticle = (req, res, next) => {
   Article.findByIdAndRemove(req.params.articleId)
     .then((article) => {
       if (!article) {
-        return res.status(400).send({ message: 'Article Id is not found' });
+        throw new BadRequestError('Article Id is not found');
       }
-      return res.status(200).send(article);
-    }).catch();
+      return res.status(STATUS_CODE_OK).send(article);
+    }).catch(next);
 };
 module.exports = {
   getArticles,
