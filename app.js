@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const userRouter = require('./routes/users');
 const articleRouter = require('./routes/articles');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const jsonParser = bodyParser.json();
 
@@ -19,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/newsdb', {
   useFindAndModify: false,
 });
 app.use(jsonParser);
-
+app.use(requestLogger);
 app.use((req, res, next) => {
   req.user = {
     _id: '5d8b8592978f8bd833ca8133',
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 app.use('/users', userRouter);
 app.use('/articles', articleRouter);
 
+app.use(errorLogger);
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
