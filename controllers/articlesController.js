@@ -6,6 +6,7 @@ const {
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-req-err');
+const UnauthorizedError = require('../errors/unauthorized-err');
 
 const getArticles = (req, res, next) => {
   Article.find({})
@@ -32,12 +33,17 @@ const createArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-  Article.findByIdAndRemove(req.params.articleId)
+  Article.findById(req.params.articleId).select('+owner')
     .then((article) => {
       if (!article) {
         throw new BadRequestError('Article Id is not found');
       }
-      return res.status(STATUS_CODE_OK).send(article);
+      if (req.user._id === article.owner.toString()) {
+        Article.deleteOne(article)
+          .then(() => res.status(STATUS_CODE_OK).send(article));
+      } else {
+        throw new UnauthorizedError('Permission denied');
+      }
     }).catch(next);
 };
 module.exports = {
