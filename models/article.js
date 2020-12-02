@@ -28,6 +28,7 @@ const articleShema = new mongoose.Schema({
       validator: (v) => isURL(v),
       message: 'Invalid Url',
     },
+    required: true,
   },
   image: {
     type: String,
@@ -35,6 +36,7 @@ const articleShema = new mongoose.Schema({
       validator: (v) => isURL(v),
       message: 'Invalid Url',
     },
+    required: true,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { celebrate, Joi, errors } = require('celebrate');
 
 require('dotenv').config();
 
@@ -25,13 +26,25 @@ mongoose.connect('mongodb://localhost:27017/newsdb', {
 app.use(jsonParser);
 app.use(requestLogger);
 
-app.post('/signup', registerNewUser);
-app.post('/signin', loginUser);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30),
+  }),
+}), registerNewUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), loginUser);
 
 app.use('/users', auth, userRouter);
 app.use('/articles', auth, articleRouter);
 
 app.use(errorLogger);
+app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
