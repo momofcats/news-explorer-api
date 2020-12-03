@@ -25,7 +25,7 @@ app.use(limiter);
 app.use(helmet());
 app.use(jsonParser);
 app.use(requestLogger);
-app.use('/', mainRouter);
+app.use('/api', mainRouter);
 app.use((req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
 });
