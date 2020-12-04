@@ -9,7 +9,7 @@ const {
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-req-err');
-const ForbiddenError = require('../errors/forbidden-err');
+const ConflictError = require('../errors/conflict-err');
 
 const SALT = 10;
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -37,7 +37,7 @@ const registerNewUser = (req, res, next) => {
   return User.findOne({ email })
     .then((admin) => {
       if (admin) {
-        throw new ForbiddenError('User with this email already exists');
+        throw new ConflictError('User with this email already exists');
       }
       return bcrypt.hash(password, SALT)
         .then((hash) => User.create({
