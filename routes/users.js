@@ -6,7 +6,7 @@ const {
 
 userRouter.get('/:id', celebrate({
   params: Joi.object().keys({
-    articleId: Joi.string().alphanum().length(24),
+    id: Joi.string().regex(/me/),
   }),
 }), getUserInfo);
 

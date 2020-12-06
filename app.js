@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const limiter = require('./utils/rateLimit');
 require('dotenv').config();
 const mainRouter = require('./routes/index');
+const NotFoundError = require('./errors/not-found-err');
+const notFoundResource = require('./utils/errorMessages');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
@@ -26,12 +28,11 @@ app.use(helmet());
 app.use(jsonParser);
 app.use(requestLogger);
 app.use('/', mainRouter);
-app.use((req, res) => {
-  res.status(404).send({ message: 'Requested resource not found' });
-});
 app.use(errorLogger);
+app.use((req, res) => {
+  throw new NotFoundError(notFoundResource);
+});
 app.use(errorHandler);
-
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });

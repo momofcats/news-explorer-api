@@ -6,6 +6,11 @@ const {
   STATUS_CODE_OK,
   STATUS_CODE_CREATED,
 } = require('../utils/statusCodes');
+const {
+  noMatchingId,
+  emptyCredentials,
+  existingUser,
+} = require('../utils/errorMessages');
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-req-err');
@@ -22,7 +27,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('No user with matching ID found');
+        throw new NotFoundError(noMatchingId);
       }
       return res.status(STATUS_CODE_OK).send(user);
     })
@@ -32,12 +37,12 @@ const getUserInfo = (req, res, next) => {
 const registerNewUser = (req, res, next) => {
   const { email, password, name } = req.body;
   if (!email || !password) {
-    throw new BadRequestError('Email or password should not be empty');
+    throw new BadRequestError(emptyCredentials);
   }
   return User.findOne({ email })
     .then((admin) => {
       if (admin) {
-        throw new ConflictError('User with this email already exists');
+        throw new ConflictError(existingUser);
       }
       return bcrypt.hash(password, SALT)
         .then((hash) => User.create({
@@ -51,7 +56,7 @@ const registerNewUser = (req, res, next) => {
 const loginUser = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new BadRequestError('Email or password should not be empty');
+    throw new BadRequestError(emptyCredentials);
   }
   return User.findUserByCredentials(email, password)
     .then((user) => {
