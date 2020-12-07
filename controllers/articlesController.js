@@ -39,7 +39,7 @@ const createArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-  Article.findById(req.params.articleId).select('+owner')
+  Article.findById(req.params.articleId)
     .then((article) => {
       if (!article) {
         throw new BadRequestError(noMatchingArticle);

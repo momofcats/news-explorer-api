@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const isURL = require('validator/lib/isURL');
 
-const articleShema = new mongoose.Schema({
+const articleSchema = new mongoose.Schema({
   keyword: {
     type: String,
     required: true,
@@ -41,8 +41,13 @@ const articleShema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    select: false,
   },
 }, { versionKey: false });
 
-module.exports = mongoose.model('article', articleShema);
+articleSchema.methods.toJSON = function toJSON() {
+  const obj = this.toObject();
+  delete obj.owner;
+  return obj;
+};
+
+module.exports = mongoose.model('article', articleSchema);

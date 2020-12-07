@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false,
   },
   name: {
     type: String,
@@ -28,8 +27,14 @@ const userSchema = new mongoose.Schema({
   },
 }, { versionKey: false });
 
+userSchema.methods.toJSON = function toJSON() {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email }).select('+password')
+  return this.findOne({ email })
     .then((user) => {
       if (!user) {
         throw new UnauthorizedError(IncorrectCredentials);
