@@ -3,7 +3,7 @@
 ## The API of "News explorer" is handled by the back-end server. It is build using node js express library.
 
 * [A link to the repository which contains api code](https://github.com/momofcats/news-explorer-api)
-* The API is located on a domain name: ykhilko.news-explorer.students.nomoreparties.site/api
+* The API is located on a domain name: api.ykhilko.news-explorer.students.nomoreparties.site
 
 ### The API handles the following routes:
 
