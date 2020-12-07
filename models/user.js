@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const isEmail = require('validator/lib/isEmail');
 const bcrypt = require('bcryptjs');
 const UnauthorizedError = require('../errors/unauthorized-err');
+const IncorrectCredentials = require('../utils/errorMessages');
+const { incorrectCredentials } = require('../utils/errorMessages');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -22,6 +24,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
+    required: true,
   },
 }, { versionKey: false });
 
@@ -29,12 +32,12 @@ userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Incorrect email or password');
+        throw new UnauthorizedError(IncorrectCredentials);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new UnauthorizedError('Incorrect email or password'));
+            return Promise.reject(new UnauthorizedError(incorrectCredentials));
           }
           return user;
         });

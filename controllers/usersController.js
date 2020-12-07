@@ -36,7 +36,7 @@ const getUserInfo = (req, res, next) => {
 
 const registerNewUser = (req, res, next) => {
   const { email, password, name } = req.body;
-  if (!email || !password) {
+  if (!email || !password || !name) {
     throw new BadRequestError(emptyCredentials);
   }
   return User.findOne({ email })
