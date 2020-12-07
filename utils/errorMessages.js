@@ -1,6 +1,6 @@
 const notFoundResource = 'Requested resource not found';
 const noMatchingId = 'No user with matching ID found';
-const emptyCredentials = 'Email or password should not be empty';
+const emptyCredentials = 'Name, email or password should not be empty';
 const incorrectCredentials = 'Incorrect email or password';
 const existingUser = 'User with this email already exists';
 const noMatchingArticle = 'Article Id is not found';

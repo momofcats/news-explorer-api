@@ -6,18 +6,13 @@ const {
   STATUS_CODE_OK,
   STATUS_CODE_CREATED,
 } = require('../utils/statusCodes');
-const {
-  noMatchingId,
-  emptyCredentials,
-  existingUser,
-} = require('../utils/errorMessages');
+const errorMessages = require('../utils/errorMessages');
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-req-err');
 const ConflictError = require('../errors/conflict-err');
 
-const SALT = 10;
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET, SALT = 10 } = process.env;
 
 const getUserInfo = (req, res, next) => {
   let userId = req.params.id;
@@ -27,7 +22,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError(noMatchingId);
+        throw new NotFoundError(errorMessages.noMatchingId);
       }
       return res.status(STATUS_CODE_OK).send(user);
     })
@@ -37,12 +32,12 @@ const getUserInfo = (req, res, next) => {
 const registerNewUser = (req, res, next) => {
   const { email, password, name } = req.body;
   if (!email || !password || !name) {
-    throw new BadRequestError(emptyCredentials);
+    throw new BadRequestError(errorMessages.emptyCredentials);
   }
   return User.findOne({ email })
     .then((admin) => {
       if (admin) {
-        throw new ConflictError(existingUser);
+        throw new ConflictError(errorMessages.existingUser);
       }
       return bcrypt.hash(password, SALT)
         .then((hash) => User.create({
@@ -56,7 +51,7 @@ const registerNewUser = (req, res, next) => {
 const loginUser = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new BadRequestError(emptyCredentials);
+    throw new BadRequestError(errorMessages.emptyCredentials);
   }
   return User.findUserByCredentials(email, password)
     .then((user) => {

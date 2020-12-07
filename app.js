@@ -6,7 +6,7 @@ const limiter = require('./utils/rateLimit');
 require('dotenv').config();
 const mainRouter = require('./routes/index');
 const NotFoundError = require('./errors/not-found-err');
-const notFoundResource = require('./utils/errorMessages');
+const errorMessages = require('./utils/errorMessages');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
@@ -30,7 +30,7 @@ app.use(requestLogger);
 app.use('/', mainRouter);
 app.use(errorLogger);
 app.use((req, res) => {
-  throw new NotFoundError(notFoundResource);
+  throw new NotFoundError(errorMessages.notFoundResource);
 });
 app.use(errorHandler);
 app.listen(PORT, () => {
