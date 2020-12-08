@@ -29,10 +29,8 @@ app.use(jsonParser);
 app.use(requestLogger);
 app.use('/', mainRouter);
 app.use(errorLogger);
-app.use((req, res) => {
+app.use(() => {
   throw new NotFoundError(errorMessages.notFoundResource);
 });
 app.use(errorHandler);
-app.listen(PORT, () => {
-  console.log(`App listening at port ${PORT}`);
-});
+app.listen(PORT);
