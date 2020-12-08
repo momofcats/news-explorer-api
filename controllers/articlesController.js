@@ -7,7 +7,6 @@ const {
 const errorMessages = require('../utils/errorMessages');
 
 const NotFoundError = require('../errors/not-found-err');
-const BadRequestError = require('../errors/bad-req-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
 
 const getArticles = (req, res, next) => {
@@ -38,7 +37,7 @@ const deleteArticle = (req, res, next) => {
   Article.findById(req.params.articleId)
     .then((article) => {
       if (!article) {
-        throw new BadRequestError(errorMessages.noMatchingArticle);
+        throw new NotFoundError(errorMessages.noMatchingArticle);
       }
       if (req.user._id === article.owner.toString()) {
         Article.deleteOne(article)

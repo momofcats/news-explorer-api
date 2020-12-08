@@ -15,10 +15,7 @@ const ConflictError = require('../errors/conflict-err');
 const { NODE_ENV, JWT_SECRET, SALT = 10 } = process.env;
 
 const getUserInfo = (req, res, next) => {
-  let userId = req.params.id;
-  if (userId === 'me') {
-    userId = req.user._id;
-  }
+  const userId = req.user._id;
   User.findById(userId)
     .then((user) => {
       if (!user) {
