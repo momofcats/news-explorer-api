@@ -10,11 +10,11 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  text: {
+  description: {
     type: String,
     required: true,
   },
-  date: {
+  publishedAt: {
     type: String,
     required: true,
   },
@@ -22,7 +22,7 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  link: {
+  url: {
     type: String,
     validate: {
       validator: (v) => isURL(v),
@@ -30,7 +30,7 @@ const articleSchema = new mongoose.Schema({
     },
     required: true,
   },
-  image: {
+  urlToImage: {
     type: String,
     validate: {
       validator: (v) => isURL(v),
@@ -44,11 +44,5 @@ const articleSchema = new mongoose.Schema({
     select: false,
   },
 }, { versionKey: false });
-
-// articleSchema.methods.toJSON = function toJSON() {
-//   const obj = this.toObject();
-//   delete obj.owner;
-//   return obj;
-// };
 
 module.exports = mongoose.model('article', articleSchema);
