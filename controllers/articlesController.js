@@ -10,7 +10,7 @@ const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
 
 const getArticles = (req, res, next) => {
-  Article.find({})
+  Article.find({}).select('+owner')
     .then((articles) => {
       if (articles.length === 0) {
         throw new NotFoundError(errorMessages.notFoundArticles);

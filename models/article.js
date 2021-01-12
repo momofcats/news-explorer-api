@@ -41,13 +41,14 @@ const articleSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    select: false,
   },
 }, { versionKey: false });
 
-articleSchema.methods.toJSON = function toJSON() {
-  const obj = this.toObject();
-  delete obj.owner;
-  return obj;
-};
+// articleSchema.methods.toJSON = function toJSON() {
+//   const obj = this.toObject();
+//   delete obj.owner;
+//   return obj;
+// };
 
 module.exports = mongoose.model('article', articleSchema);
