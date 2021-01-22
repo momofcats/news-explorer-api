@@ -24,7 +24,13 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost
   useCreateIndex: true,
   useFindAndModify: false,
 });
-app.use(cors());
+app.use(cors({
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204,
+  "maxAge": 86400
+}));
 app.use(limiter);
 app.use(helmet());
 app.use(jsonParser);
