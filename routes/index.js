@@ -5,7 +5,7 @@ const articleRouter = require('./articles');
 const { loginUser, registerNewUser } = require('../controllers/usersController');
 const auth = require('../middleware/auth');
 
-mainRouter.post('/signup', celebrate({
+mainRouter.post('/signup', cors(), celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().alphanum().required(),

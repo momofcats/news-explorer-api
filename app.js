@@ -25,7 +25,6 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost
   useFindAndModify: false,
 });
 app.use(cors());
-app.options('*', cors());
 app.use(limiter);
 app.use(helmet());
 app.use(jsonParser);
