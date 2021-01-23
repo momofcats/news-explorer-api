@@ -12,7 +12,7 @@ const UnauthorizedError = require('../errors/unauthorized-err');
 const getArticles = (req, res, next) => {
   Article.find({}).select('+owner')
     .then((articles) => {
-      if (articles.length === 0) {
+      if (!articles) {
         throw new NotFoundError(errorMessages.notFoundArticles);
       }
       return res.status(STATUS_CODE_OK).send(articles);
