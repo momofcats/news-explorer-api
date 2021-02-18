@@ -65,7 +65,7 @@ Successful Response:
         {"token":                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJfaWQiOiI2MDJkYWU0YzlhMDVlNzAwMDQ4YjlhYWYiLCJpYXQiOjE2MTM2MDc4NjYsImV4cCI6MTYxNDIxMjY2Nn0.anh7WUfmblTxP8cVR2lOkx-7qB95Et1Bvd10B7yhsLQ"}
 
 
-## Returns information about the logged-in user
+## Return information about the logged-in user
 
 Request:
 
@@ -82,7 +82,7 @@ Successful Response:
           "name": "John Doe"
         }
 
-## Returns array of articles saved by the users in the database
+## Return array of articles saved by the users in the database
 
 Request:
 
