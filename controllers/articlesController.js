@@ -10,9 +10,9 @@ const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
 
 const getArticles = (req, res, next) => {
-  Article.find({})
+  Article.find({}).select('+owner')
     .then((articles) => {
-      if (articles.length === 0) {
+      if (!articles) {
         throw new NotFoundError(errorMessages.notFoundArticles);
       }
       return res.status(STATUS_CODE_OK).send(articles);
@@ -22,10 +22,10 @@ const getArticles = (req, res, next) => {
 
 const createArticle = (req, res, next) => {
   const {
-    keyword, title, text, date, source, link, image,
+    keyword, title, description, publishedAt, source, url, urlToImage,
   } = req.body;
   Article.create({
-    keyword, title, text, date, source, link, image, owner: req.user._id,
+    keyword, title, description, publishedAt, source, url, urlToImage, owner: req.user._id,
   })
     .then((article) => {
       res.status(STATUS_CODE_CREATED).send(article);
@@ -34,7 +34,7 @@ const createArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-  Article.findById(req.params.articleId)
+  Article.findById(req.params.articleId).select('+owner')
     .then((article) => {
       if (!article) {
         throw new NotFoundError(errorMessages.noMatchingArticle);

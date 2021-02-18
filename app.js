@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const limiter = require('./utils/rateLimit');
 require('dotenv').config();
 const mainRouter = require('./routes/index');
 const NotFoundError = require('./errors/not-found-err');
+
 const errorMessages = require('./utils/errorMessages');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
@@ -22,7 +24,7 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost
   useCreateIndex: true,
   useFindAndModify: false,
 });
-
+app.use(cors());
 app.use(limiter);
 app.use(helmet());
 app.use(jsonParser);
